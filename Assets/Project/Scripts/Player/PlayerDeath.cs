@@ -22,6 +22,7 @@ public class PlayerDeath : MonoBehaviour
         Debug.Log("Player is dead");
         
         GameManager.Instance.PlayerDied();
+        GameManager.Instance.ResetScore();
     }
 
     private void FreezeInput()

@@ -19,13 +19,13 @@ IPointerUpHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("POINTER DOWN");
+        //Debug.Log("POINTER DOWN");
         OnDrag(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("DRAG");
+        //Debug.Log("DRAG");
         Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _baseRect,
@@ -39,7 +39,7 @@ IPointerUpHandler
 
         _handle.anchoredPosition = localPoint;
         inputVector = localPoint / _maxRadius;
-        Debug.Log(inputVector);
+        //Debug.Log(inputVector);
     }
 
     public void OnPointerUp(PointerEventData eventData)

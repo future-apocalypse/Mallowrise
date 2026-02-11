@@ -24,10 +24,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 joystickInput = joystick != null ? joystick.inputVector : Vector2.zero;
 
-        if (joystickInput.sqrMagnitude > 0.01f)
-        {
-            _moveInput = joystickInput;
-        }
+        if (joystick != null)
+    {
+        _moveInput = joystick.inputVector;
+    }
         
     }
 

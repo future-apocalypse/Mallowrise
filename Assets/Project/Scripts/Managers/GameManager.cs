@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,9 @@ public class GameManager : MonoBehaviour
  [SerializeField] private int maxDifficultyTier = 5;
  private int _difficultyTier;
 
-
+ 
+ [SerializeField] private TextMeshProUGUI _marshmallowCountText;
+ private int _marshmallowCount = 0;
  
  private void Awake()
  {
@@ -59,6 +62,21 @@ public class GameManager : MonoBehaviour
  private void ReloadScene()
  {
   SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+ }
+ public void AddMarshmallow()
+ {
+  _marshmallowCount++;
+  UpdateUI();
+ }
+
+ private void UpdateUI()
+ {
+  _marshmallowCountText.text = _marshmallowCount.ToString();
+ }
+ public void ResetScore()
+ {
+  _marshmallowCount = 0;
+  UpdateUI();
  }
 
 }

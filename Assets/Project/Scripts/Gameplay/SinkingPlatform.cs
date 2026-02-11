@@ -20,6 +20,8 @@ public class SinkingPlatform : MonoBehaviour
     private float _timer;
     private bool _sinkingForever;
     private bool _timerActive;
+
+    private bool _hasBeenCounted = false;
     
     
     void Start()
@@ -81,6 +83,8 @@ public class SinkingPlatform : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (_hasBeenCounted) return;
+        
         if (collision.gameObject.CompareTag("Player"))
         {
             _playerOnPlatform = true;
@@ -91,6 +95,10 @@ public class SinkingPlatform : MonoBehaviour
                 : _defaultSinkDelay;
             
             GameManager.Instance.RegisterJump();
+
+            _hasBeenCounted = true;
+            GameManager.Instance.AddMarshmallow();
+            
         }
     }
 
@@ -98,6 +106,7 @@ public class SinkingPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player")){
             _playerOnPlatform = false;
+            
         }
     }
 }

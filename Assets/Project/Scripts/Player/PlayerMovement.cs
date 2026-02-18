@@ -12,31 +12,20 @@ public class PlayerMovement : MonoBehaviour
     private bool _jumpRequest;
     private Vector2 _moveInput;
     
-    [SerializeField] private VirtualJoystick joystick;
-    //public Vector2 InputVector { get; private set; }
-
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
     }
-
-    void Update()
-    {
-        Vector2 joystickInput = joystick != null ? joystick.inputVector : Vector2.zero;
-
-        if (joystick != null)
-    {
-        _moveInput = joystick.inputVector;
-    }
-        
-    }
-
+    
     void FixedUpdate()
     {
+        
         Vector3 movement = new Vector3(_moveInput.x, 0, _moveInput.y);
-        if(movement.sqrMagnitude > 1)
-            movement.Normalize();
             
+        if(movement.sqrMagnitude > 1)
+              movement.Normalize();
+
+
         Vector3 horizontalVelocity = movement * _moveSpeed;
         _rb.linearVelocity = new Vector3(horizontalVelocity.x, _rb.linearVelocity.y, horizontalVelocity.z);
 
@@ -51,13 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if(joystick != null && joystick.inputVector.sqrMagnitude > 0.01f)
-            return;
-        
         _moveInput = context.ReadValue<Vector2>();
     }
-
-   public void OnJump(InputAction.CallbackContext context)
+    
+    public void OnJump(InputAction.CallbackContext context)
     {
         if (context.started)
         {

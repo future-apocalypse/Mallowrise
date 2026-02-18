@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ChocolateMat
+  m_Name: DeadMarshmallowMat
   m_Shader: {fileID: 4800000, guid: 313fcf3aebc04cf4ab4f8c5f2850be7f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -131,9 +131,9 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.8235294, g: 0.64705884, b: 0.58431375, a: 1}
+    - _BaseColor: {r: 0.9607843, g: 0.6117647, b: 0.60784316, a: 1}
     - _Base_Color: {r: 1, g: 0.7028302, b: 0.7028302, a: 0}
-    - _Color: {r: 0.7647059, g: 0.47843128, b: 0.41960782, a: 1}
+    - _Color: {r: 0.96078426, g: 0.6117647, b: 0.60784316, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Highlight_Color: {r: 1, g: 0.6156863, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
@@ -144,7 +144,7 @@ Material:
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &5435254050007016159
+--- !u!114 &5337491315810528156
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

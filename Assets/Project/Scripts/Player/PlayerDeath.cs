@@ -25,17 +25,17 @@ public class PlayerDeath : MonoBehaviour
         GameManager.Instance.ResetScore();
     }
 
-    private void FreezeInput()
-    {
-        var movement = GetComponent<PlayerMovement>();
-        if (movement != null)
-            movement.enabled = false;
-        
-        var rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
-    }
+    // private void FreezeInput()
+    // {
+    //     var movement = GetComponent<PlayerMovement>();
+    //     if (movement != null)
+    //         movement.enabled = false;
+    //     
+    //     var rb = GetComponent<Rigidbody>();
+    //     if (rb != null)
+    //     {
+    //         rb.linearVelocity = Vector3.zero;
+    //         rb.isKinematic = true;
+    //     }
+    // }
 }

@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Spawner : MonoBehaviour
 {
+    private List<SinkingPlatform> _activePlatforms = new List<SinkingPlatform>();
  [SerializeField] private GameObject[] _deadMarshmallowPrefab;
  
  [SerializeField] private float _spawnInterval = 3f;
@@ -99,23 +102,9 @@ public class Spawner : MonoBehaviour
 
         return candidate;
     }
-    // private void SpawnMarshmallow()
-    // {
-    //     if (transform.childCount >= _maxActivePlatforms)
-    //         return;
-    //     int randomIndex = Random.Range(0, _deadMarshmallowPrefab.Length);
-    //     GameObject selected = _deadMarshmallowPrefab[randomIndex];
-    //     
-    //     Vector3 spawnPosition = GetValidSpawnPosition();
-    //     Quaternion baseRotation = selected.transform.rotation;
-    //     Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-    //
-    //     Instantiate(selected, spawnPosition, baseRotation * randomY, transform);
-    //     
-    // }
     private void SpawnMarshmallow()
     {
-        if (transform.childCount >= _maxActivePlatforms)
+        if (_activePlatforms.Count >= _maxActivePlatforms)
             return;
 
         int randomIndex = Random.Range(0, _deadMarshmallowPrefab.Length);
@@ -123,25 +112,30 @@ public class Spawner : MonoBehaviour
 
         Vector3 spawnPosition = GetValidSpawnPosition();
 
+        int attempts = 0;
+        while (_activePlatforms.Any(p =>
+                   Vector3.Distance(new Vector3(p.transform.position.x, 0, p.transform.position.z),
+                       new Vector3(spawnPosition.x, 0, spawnPosition.z))
+                   < _minHorizontalDistance) && attempts < 10)
+        {
+            spawnPosition = GetValidSpawnPosition();
+            attempts++;
+        }
+
         Quaternion baseRotation = selected.transform.rotation;
         Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-        GameObject instance = Instantiate(
-            selected,
-            spawnPosition,
-            baseRotation * randomY,
-            transform
-        );
+        GameObject instance = Instantiate(selected, spawnPosition, baseRotation * randomY, transform);
 
         SinkingPlatform platform = instance.GetComponent<SinkingPlatform>();
         if (platform != null)
         {
             platform.Initialize(spawnPosition.y);
+            _activePlatforms.Add(platform);
+            platform.OnDestroyed += () => _activePlatforms.Remove(platform);
         }
     }
     
-    
-
     public void SetSpawnInterval(float value)
     {
         _spawnInterval = value;

@@ -28,15 +28,9 @@ public class SinkingPlatform : MonoBehaviour
     
     [SerializeField] private float _riseOffset = 1.2f;
     [SerializeField] private float _riseDuration = 0.6f;
-    //[SerializeField] private float _riseForce = 8f;
 
     private bool _isRising;
-    
-    void Start()
-    {
-        
-        //_restY = transform.position.y;
-    }
+    public event System.Action OnDestroyed;
 
     void FixedUpdate()
     {
@@ -74,6 +68,13 @@ public class SinkingPlatform : MonoBehaviour
 
     void Update()
     {
+        
+        if (transform.position.y < _destroyY)
+        {
+            OnDestroyed?.Invoke();
+            Destroy(gameObject);
+        }
+        
         if (!_sinkingForever && _timerActive)
         {
             _timer += Time.deltaTime;
@@ -89,6 +90,7 @@ public class SinkingPlatform : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
 
     void OnCollisionEnter(Collision collision)

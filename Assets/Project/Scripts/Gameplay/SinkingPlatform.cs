@@ -23,6 +23,8 @@ public class SinkingPlatform : MonoBehaviour
 
     private bool _hasBeenCounted = false;
     
+    [SerializeField] private ParticleSystem _splashParticles;
+    private bool _triggered = false;
     
     void Start()
     {
@@ -98,7 +100,11 @@ public class SinkingPlatform : MonoBehaviour
 
             _hasBeenCounted = true;
             GameManager.Instance.AddMarshmallow();
-            
+
+            if (_triggered) return;
+            _triggered = true;
+            _splashParticles.Play();
+
         }
     }
 

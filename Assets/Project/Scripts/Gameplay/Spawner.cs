@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour
 {
- [SerializeField] private GameObject _deadMarshmallowPrefab;
+ [SerializeField] private GameObject[] _deadMarshmallowPrefab;
+ 
  [SerializeField] private float _spawnInterval = 3f;
  [SerializeField] private BoxCollider cupBounds;
 
@@ -102,10 +103,14 @@ public class Spawner : MonoBehaviour
     {
         if (transform.childCount >= _maxActivePlatforms)
             return;
+        int randomIndex = Random.Range(0, _deadMarshmallowPrefab.Length);
+        GameObject selected = _deadMarshmallowPrefab[randomIndex];
         
         Vector3 spawnPosition = GetValidSpawnPosition();
-        Quaternion randomRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-        Instantiate(_deadMarshmallowPrefab, spawnPosition, randomRotation, transform);    }
+        Quaternion baseRotation = selected.transform.rotation;
+        Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+
+        Instantiate(selected, spawnPosition, baseRotation * randomY, transform);}
     
     
 

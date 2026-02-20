@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6708857675703060050, guid: 5460d38b542a544df917ba8d2453cf9d, type: 3}
+  - {fileID: 2100000, guid: 569d49b5b2ffa4335a2e16cba7cf18d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   _defaultSinkDelay: 3
   _finalSinkSpeed: 0.5
   _destroyY: -5
-  _splashParticles: {fileID: 9184502868783127731, guid: 265766f7bf3714091908cd5d416a3494, type: 3}
+  _splashParticles: {fileID: 4184819650409855925}
 --- !u!1001 &5000860350914963206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -314,5 +314,10 @@ PrefabInstance:
 --- !u!4 &1775676749176233705 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6756216817306237423, guid: 265766f7bf3714091908cd5d416a3494, type: 3}
+  m_PrefabInstance: {fileID: 5000860350914963206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4184819650409855925 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9184502868783127731, guid: 265766f7bf3714091908cd5d416a3494, type: 3}
   m_PrefabInstance: {fileID: 5000860350914963206}
   m_PrefabAsset: {fileID: 0}

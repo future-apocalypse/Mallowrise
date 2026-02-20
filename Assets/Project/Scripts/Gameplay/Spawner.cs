@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
  [SerializeField] private float _minHorizontalDistance = 2f;
  [SerializeField] private float _maxHorizontalDistance = 5f;
  [SerializeField] private float _horizontalPadding = 1f;
- [SerializeField] private int _maxActivePlatforms = 4;
+ [SerializeField] private int _maxActivePlatforms = 3;
  
  private Vector3 _lastSpawnPosition;
  private bool _hasLastSpawnPosition;
@@ -99,18 +99,46 @@ public class Spawner : MonoBehaviour
 
         return candidate;
     }
+    // private void SpawnMarshmallow()
+    // {
+    //     if (transform.childCount >= _maxActivePlatforms)
+    //         return;
+    //     int randomIndex = Random.Range(0, _deadMarshmallowPrefab.Length);
+    //     GameObject selected = _deadMarshmallowPrefab[randomIndex];
+    //     
+    //     Vector3 spawnPosition = GetValidSpawnPosition();
+    //     Quaternion baseRotation = selected.transform.rotation;
+    //     Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+    //
+    //     Instantiate(selected, spawnPosition, baseRotation * randomY, transform);
+    //     
+    // }
     private void SpawnMarshmallow()
     {
         if (transform.childCount >= _maxActivePlatforms)
             return;
+
         int randomIndex = Random.Range(0, _deadMarshmallowPrefab.Length);
         GameObject selected = _deadMarshmallowPrefab[randomIndex];
-        
+
         Vector3 spawnPosition = GetValidSpawnPosition();
+
         Quaternion baseRotation = selected.transform.rotation;
         Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-        Instantiate(selected, spawnPosition, baseRotation * randomY, transform);}
+        GameObject instance = Instantiate(
+            selected,
+            spawnPosition,
+            baseRotation * randomY,
+            transform
+        );
+
+        SinkingPlatform platform = instance.GetComponent<SinkingPlatform>();
+        if (platform != null)
+        {
+            platform.Initialize(spawnPosition.y);
+        }
+    }
     
     
 

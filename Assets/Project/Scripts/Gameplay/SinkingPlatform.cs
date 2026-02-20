@@ -26,14 +26,22 @@ public class SinkingPlatform : MonoBehaviour
     [SerializeField] private ParticleSystem _splashParticles;
     private bool _triggered = false;
     
+    [SerializeField] private float _riseOffset = 1.2f;
+    [SerializeField] private float _riseDuration = 0.6f;
+    //[SerializeField] private float _riseForce = 8f;
+
+    private bool _isRising;
+    
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        _restY = transform.position.y;
+        
+        //_restY = transform.position.y;
     }
 
     void FixedUpdate()
     {
+        if (_rb == null || _isRising) return;
+        
         if (_sinkingForever)
         {
             _rb.linearDamping = 1f;
@@ -115,4 +123,52 @@ public class SinkingPlatform : MonoBehaviour
             
         }
     }
+    private System.Collections.IEnumerator RiseRoutine()
+    {
+        float startY = transform.position.y;
+        float t = 0f;
+
+        while (t < _riseDuration)
+        {
+            t += Time.deltaTime;
+            float progress = t / _riseDuration;
+
+            float smooth = Mathf.SmoothStep(0f, 1f, progress);
+            float newY = Mathf.Lerp(startY, _restY, smooth);
+
+            transform.position = new Vector3(
+                transform.position.x,
+                newY,
+                transform.position.z
+            );
+
+            yield return null;
+        }
+
+        transform.position = new Vector3(
+            transform.position.x,
+            _restY,
+            transform.position.z
+        );
+
+        _rb.isKinematic = false;
+        _isRising = false;
+    }
+    public void Initialize(float surfaceY)
+    {
+        if (_rb == null)
+            _rb = GetComponent<Rigidbody>();
+        
+        _restY = surfaceY;
+
+        Vector3 pos = transform.position;
+        pos.y = surfaceY - _riseOffset;
+        transform.position = pos;
+
+        _rb.isKinematic = true;
+        _isRising = true;
+
+        StartCoroutine(RiseRoutine());
+    }
+    
 }

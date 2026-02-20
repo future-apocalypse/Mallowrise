@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _jumpRequest;
     private Vector2 _moveInput;
     
+    private float _rotationSpeed = 15f;
+    
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -24,6 +26,16 @@ public class PlayerMovement : MonoBehaviour
             
         if(movement.sqrMagnitude > 1)
               movement.Normalize();
+        
+        if (movement.sqrMagnitude > 0.0001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                _rotationSpeed * Time.fixedDeltaTime
+            );
+        }
 
 
         Vector3 horizontalVelocity = movement * _moveSpeed;

@@ -106,7 +106,7 @@ Material:
     - _LightCut: 0.2
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0.5
+    - _OutlineWidth: 1
     - _Outline_Size: 0.3
     - _Parallax: 0.005
     - _QueueControl: 0
@@ -115,7 +115,7 @@ Material:
     - _RimStep: 0
     - _RimStepSmooth: 0
     - _ShadowBrightness: 0.5
-    - _ShadowStep: 0.5
+    - _ShadowStep: 0.7
     - _ShadowStepSmooth: 0
     - _Shadows_Contrast: 1
     - _Shadows_Size: 1

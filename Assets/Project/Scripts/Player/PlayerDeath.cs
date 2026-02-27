@@ -12,6 +12,7 @@ public class PlayerDeath : MonoBehaviour
         if (other.CompareTag("Chocolate"))
         {
             Die();
+            
         }
     }
 
@@ -19,10 +20,9 @@ public class PlayerDeath : MonoBehaviour
     {
         _isDead = true;
         
-        Debug.Log("Player is dead");
-        
         GameManager.Instance.PlayerDied();
         GameManager.Instance.ResetScore();
+        AudioManager.Instance.PlayGameOverSound();
     }
 
     // private void FreezeInput()

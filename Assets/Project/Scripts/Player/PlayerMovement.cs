@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    
     private Rigidbody _rb;
     private float _moveSpeed = 5.0f;
     private float _groundDistance = 1.5f;
@@ -60,11 +61,13 @@ public class PlayerMovement : MonoBehaviour
         if (context.started)
         {
             _jumpRequest = true;
+           AudioManager.Instance.PlayJumpSound();
         }
     }
     public void RequestJump()
     {
         _jumpRequest = true;
+        
     }
 
     private bool IsGrounded()

@@ -1,6 +1,8 @@
 using System;
 using TMPro;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -18,8 +20,14 @@ public class GameManager : MonoBehaviour
  [SerializeField] private TextMeshProUGUI _marshmallowCountText;
  private int _marshmallowCount = 0;
  
+ [SerializeField] private GameObject pausePanel;
+ private bool _isPaused;
+ 
  private void Awake()
  {
+  Application.targetFrameRate = 60;
+  
+  
   if (Instance == null)
       Instance = this;
   else {
@@ -77,6 +85,40 @@ public class GameManager : MonoBehaviour
  {
   _marshmallowCount = 0;
   UpdateUI();
+ }
+
+ public void ToglePause()
+ {
+  if (_isPaused)
+  {
+   Resume();
+  }
+  else
+  {
+   Pause();
+  }
+ }
+
+ public void Pause()
+ {
+  _isPaused = true;
+  pausePanel.SetActive(true);
+  Time.timeScale = 0f;
+  AudioListener.pause = true;
+ }
+
+ public void Resume()
+ {
+  _isPaused = false;
+  pausePanel.SetActive(false);
+  Time.timeScale = 1f;
+  AudioListener.pause = false;
+ }
+
+ public void Restart()
+ {
+  Time.timeScale = 1f;
+  SceneManager.LoadScene(0);
  }
 
 }

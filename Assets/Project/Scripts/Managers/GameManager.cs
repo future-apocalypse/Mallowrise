@@ -1,15 +1,15 @@
-using System;
+using System.Collections;
 using TMPro;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+ public static GameManager Instance;
+ 
  public int jumpCount;
  public float survivalTime;
- public static GameManager Instance;
+ 
 
  [SerializeField] private float baseSinkTime = 5f;
  [SerializeField] private float baseSpawnInterval = 3f;
@@ -17,11 +17,19 @@ public class GameManager : MonoBehaviour
  private int _difficultyTier;
 
  
- [SerializeField] private TextMeshProUGUI _marshmallowCountText;
+ [SerializeField] private TextMeshProUGUI marshmallowCountText;
  private int _marshmallowCount = 0;
  
  [SerializeField] private GameObject pausePanel;
  private bool _isPaused;
+ 
+ [SerializeField] private GameObject countdownPanel;
+ [SerializeField] private TextMeshProUGUI countdownText;
+ private bool _isGameRunning;
+ 
+ [SerializeField] private GameObject gameOverPanel;
+ 
+ [SerializeField] private GameObject pauseButton;
  
  private void Awake()
  {
@@ -34,6 +42,11 @@ public class GameManager : MonoBehaviour
       Destroy(gameObject);
       
   }
+ }
+
+ private void Start()
+ {
+  StartCoroutine(StartCountdown());
  }
 
  private void Update()
@@ -64,7 +77,14 @@ public class GameManager : MonoBehaviour
 
  public void PlayerDied()
  {
-  Invoke(nameof(ReloadScene), 0.7f);
+  gameOverPanel.SetActive(true);
+  Time.timeScale = 0f;
+  _isGameRunning = false;
+  PlayerMovement.Instance.DisableInput();
+  AudioManager.Instance.PlayGameOverSound();
+  pausePanel.SetActive(false);
+  pauseButton.SetActive(false);
+  
  }
 
  private void ReloadScene()
@@ -79,7 +99,7 @@ public class GameManager : MonoBehaviour
 
  private void UpdateUI()
  {
-  _marshmallowCountText.text = _marshmallowCount.ToString();
+  marshmallowCountText.text = _marshmallowCount.ToString();
  }
  public void ResetScore()
  {
@@ -105,20 +125,72 @@ public class GameManager : MonoBehaviour
   pausePanel.SetActive(true);
   Time.timeScale = 0f;
   AudioListener.pause = true;
+
+  _isGameRunning = false;
+  PlayerMovement.Instance.DisableInput();
+ }
+
+ public void ResumeWithCountdown()
+ {
+  StartCoroutine(ResumeCountdown());
+ }
+
+ private IEnumerator StartCountdown()
+ {
+  Time.timeScale = 0f;
+  _isGameRunning = false;
+  countdownPanel.SetActive(true);
+  
+  yield return RunCountdown();
+  countdownPanel.SetActive(false);
+  Time.timeScale = 1f;
+  _isGameRunning = true;
+ }
+
+ private IEnumerator ResumeCountdown()
+ {
+  Time.timeScale = 0f;
+  AudioListener.pause = false;
+
+  countdownPanel.SetActive(true);
+
+  yield return RunCountdown();
+
+  countdownPanel.SetActive(false);
+  Time.timeScale = 1f;
+  _isGameRunning = true;
+ }
+
+ private IEnumerator RunCountdown()
+ {
+  countdownText.text = "3";
+  yield return new WaitForSecondsRealtime(0.7f);
+
+  countdownText.text = "2";
+  yield return new WaitForSecondsRealtime(0.6f);
+
+  countdownText.text = "1";
+  yield return new WaitForSecondsRealtime(0.5f);
+
+  countdownText.text = "GO!";
+  yield return new WaitForSecondsRealtime(0.3f);
  }
 
  public void Resume()
  {
   _isPaused = false;
   pausePanel.SetActive(false);
-  Time.timeScale = 1f;
-  AudioListener.pause = false;
+
+  StartCoroutine(ResumeCountdown());
+  PlayerMovement.Instance.EnableInput();
  }
 
  public void Restart()
  {
   Time.timeScale = 1f;
   SceneManager.LoadScene(0);
+  PlayerMovement.Instance.EnableInput();
+  AudioListener.pause = false;
  }
 
 }

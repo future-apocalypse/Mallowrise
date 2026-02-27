@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance;
     
     private Rigidbody _rb;
     private float _moveSpeed = 5.0f;
@@ -12,12 +13,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private LayerMask whatIsGround;
     private bool _jumpRequest;
     private Vector2 _moveInput;
+    private PlayerInput _playerInput;
     
     private float _rotationSpeed = 15f;
     
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        Instance = this;
+        _playerInput = GetComponent<PlayerInput>();
     }
     
     void FixedUpdate()
@@ -74,5 +78,15 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics.Raycast(transform.position, Vector3.down, _groundDistance, whatIsGround);
         
+    }
+    
+    public void EnableInput()
+    {
+        _playerInput.enabled = true;
+    }
+
+    public void DisableInput()
+    {
+        _playerInput.enabled = false;
     }
 }

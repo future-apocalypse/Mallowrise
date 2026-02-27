@@ -22,20 +22,6 @@ public class PlayerDeath : MonoBehaviour
         
         GameManager.Instance.PlayerDied();
         GameManager.Instance.ResetScore();
-        AudioManager.Instance.PlayGameOverSound();
+        
     }
-
-    // private void FreezeInput()
-    // {
-    //     var movement = GetComponent<PlayerMovement>();
-    //     if (movement != null)
-    //         movement.enabled = false;
-    //     
-    //     var rb = GetComponent<Rigidbody>();
-    //     if (rb != null)
-    //     {
-    //         rb.linearVelocity = Vector3.zero;
-    //         rb.isKinematic = true;
-    //     }
-    // }
 }

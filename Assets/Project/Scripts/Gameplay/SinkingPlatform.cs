@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class SinkingPlatform : MonoBehaviour
 {
+    public System.Action<SinkingPlatform> OnReturnToPool;
+    public GameObject OriginalPrefab { get; private set; }
+    
     [SerializeField] private float _springStrength = 40f;
     [SerializeField] private float _damping = 6f;
     [SerializeField] private float _playerWeightForce = 10f;
@@ -28,10 +31,15 @@ public class SinkingPlatform : MonoBehaviour
     
     [SerializeField] private float _riseOffset = 1.2f;
     [SerializeField] private float _riseDuration = 0.6f;
+    
 
     private bool _isRising;
     public event System.Action OnDestroyed;
 
+    public void SetOriginalPrefab(GameObject prefab)
+    {
+        OriginalPrefab = prefab;
+    }
     void FixedUpdate()
     {
         if (_rb == null || _isRising) return;
@@ -72,7 +80,8 @@ public class SinkingPlatform : MonoBehaviour
         if (transform.position.y < _destroyY)
         {
             OnDestroyed?.Invoke();
-            Destroy(gameObject);
+            
+            ReturnToPool();
         }
         
         if (!_sinkingForever && _timerActive)
@@ -84,11 +93,6 @@ public class SinkingPlatform : MonoBehaviour
                 _sinkingForever = true;
                 _rb.linearVelocity = Vector3.zero;
             }
-        }
-
-        if (transform.position.y < _destroyY)
-        {
-            Destroy(gameObject);
         }
         
     }
@@ -161,6 +165,14 @@ public class SinkingPlatform : MonoBehaviour
         if (_rb == null)
             _rb = GetComponent<Rigidbody>();
         
+        _rb.linearVelocity = Vector3.zero; 
+        _rb.angularVelocity = Vector3.zero;
+        _sinkingForever = false;
+        _timer = 0f;
+        _timerActive = false;
+        _playerOnPlatform = false;
+        _hasBeenCounted = false;
+        _triggered = false;
         _restY = surfaceY;
 
         Vector3 pos = transform.position;
@@ -171,6 +183,11 @@ public class SinkingPlatform : MonoBehaviour
         _isRising = true;
 
         StartCoroutine(RiseRoutine());
+        
+    }
+    public void ReturnToPool()
+    {
+        OnReturnToPool?.Invoke(this);
     }
     
 }

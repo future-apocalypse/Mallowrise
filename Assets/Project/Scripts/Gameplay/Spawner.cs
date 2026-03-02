@@ -23,15 +23,19 @@ public class Spawner : MonoBehaviour
  private Coroutine _spawnRoutine;
  
  public static Spawner Instance;
+ 
+ private MarshmallowPool _pool;
 
  private void Awake()
  {
      Instance = this;
+     _pool = MarshmallowPool.Instance;
  }
  
     void Start()
     {
         StartSpawning();
+       
         
     }
 
@@ -125,9 +129,13 @@ public class Spawner : MonoBehaviour
         Quaternion baseRotation = selected.transform.rotation;
         Quaternion randomY = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-        GameObject instance = Instantiate(selected, spawnPosition, baseRotation * randomY, transform);
-
-        SinkingPlatform platform = instance.GetComponent<SinkingPlatform>();
+        SinkingPlatform platform = _pool.Get(selected);
+        
+        platform.transform.SetPositionAndRotation(
+            spawnPosition,
+            baseRotation * randomY
+        );
+        
         if (platform != null)
         {
             platform.Initialize(spawnPosition.y);

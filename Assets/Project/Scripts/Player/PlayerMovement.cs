@@ -65,13 +65,13 @@ public class PlayerMovement : MonoBehaviour
         if (context.started)
         {
             _jumpRequest = true;
-           AudioManager.Instance.PlayJumpSound();
+            AudioManager.Instance.PlayJumpSound();
         }
     }
     public void RequestJump()
     {
         _jumpRequest = true;
-        
+        AudioManager.Instance.PlayJumpSound();
     }
 
     private bool IsGrounded()
